@@ -45,11 +45,11 @@ if ! command_exists kubectl; then
     exit 1
 fi
 
-KUBECTL_FLAGS=$(pwd)/admin."${TAG_PREFIX}".conf
-KUBECTL="kubectl --kubeconfig ${KUBECTL_FLAGS}"
+KUBECTL_FLAGS="--kubeconfig $(pwd)/admin.${TAG_PREFIX}.conf"
+KUBECTL="kubectl ${KUBECTL_FLAGS}"
 
-DOCTL_FLAGS=${API_ENDPOINT}
-DOCTL="doctl -u ${DOCTL_FLAGS}"
+DOCTL_FLAGS="-u ${API_ENDPOINT}"
+DOCTL="doctl ${DOCTL_FLAGS}"
 
 # generate k8s specific ssh keys
 if [ ! -f ~/.ssh/k8s/id_rsa ]; then
@@ -126,7 +126,7 @@ ${DOCTL} compute droplet create "${nodes[@]}" \
 
 echo "- Waiting nodes to be ready"
 # wait till nodes are ready
-until [ "$(KUBECTL) get nodes 2> /dev/null | grep -v master | grep -c Ready | xargs)" == "${NODE_COUNT}" ]
+until [ "$($(KUBECTL) get nodes 2> /dev/null | grep -v master | grep -c Ready | xargs)" == "${NODE_COUNT}" ]
 do
     sleep 10
 done
