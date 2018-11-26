@@ -130,8 +130,9 @@ until [ "$($(KUBECTL) get nodes 2> /dev/null | grep -v master | grep -c Ready | 
 do
     sleep 10
 done
-${KUBECTL} wait --for=condition=Ready node -l dok8s/node --timeout=600s > /dev/null
+${KUBECTL} wait --for=condition=Ready node -l dok8s/role=node --timeout=600s > /dev/null
 
+echo "- Deploying manifests"
 ${KUBECTL} create -f manifests/metrics-server > /dev/null
 
 ${KUBECTL} create namespace monitoring > /dev/null
@@ -157,6 +158,7 @@ subjects:
   namespace: kube-system
 EOF
 
+echo "- Waiting load-balancers to be ready"
 PROMPORT=$(${KUBECTL} -n monitoring get svc -o 'go-template={{range .items}}{{range.spec.ports}}{{if and (.nodePort) (eq .targetPort 9090.0)}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}')
 GRAFPORT=$(${KUBECTL} -n monitoring get svc -o 'go-template={{range .items}}{{range.spec.ports}}{{if and (.nodePort) (eq .targetPort 3000.0)}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}')
 
