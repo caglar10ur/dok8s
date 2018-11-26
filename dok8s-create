@@ -186,4 +186,4 @@ ${DOCTL} compute firewall create \
     --outbound-rules "protocol:icmp,address:0.0.0.0/0,address:::/0 protocol:tcp,ports:all,address:0.0.0.0/0,address:::/0 protocol:udp,ports:all,address:0.0.0.0/0,address:::/0" \
     --tag-names "${TAG_PREFIX}"-node > /dev/null
 
-echo "- Installation completed"
+echo "- Installation completed (took $SECONDS seconds)"

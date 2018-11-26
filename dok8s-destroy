@@ -50,4 +50,4 @@ if [ -n "${FW_ID}" ]; then
     ${DOCTL} compute firewall delete "${FW_ID}" -f
 fi
 
-echo "- Destroy completed"
+echo "- Destroy completed (took $SECONDS seconds)"
