@@ -126,7 +126,7 @@ ${DOCTL} compute droplet create "${nodes[@]}" \
 
 echo "- Waiting nodes to be ready"
 # wait till nodes are ready
-until [ "$($(KUBECTL) get nodes 2> /dev/null | grep -v master | grep -c Ready | xargs)" == "${NODE_COUNT}" ]
+until [ "$(${KUBECTL} get nodes 2> /dev/null | grep -v master | grep -c Ready | xargs)" == "${NODE_COUNT}" ]
 do
     sleep 10
 done
